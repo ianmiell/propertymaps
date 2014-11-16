@@ -1,0 +1,111 @@
+SCHEMA
+======
+
+-- tPostcode
+-- Canonical list of postcodes
+-- Index on postcode_1 and desc (for place name lookup)
+postcode_id PK, serial
+postcode_1    VARCHAR (0,10?) not null
+postcode_2    VARCHAR (0,10?) null
+long        float             not null  default 0
+lat         float             not null  default 0
+desc          VARCHAR
+
+
+
+-- tFAPAgent
+agent_id - PK, serial
+agent_details - etc
+
+-- tPropertyAgent
+agent_id    - FK
+property_id - FK
+
+
+-- tProperty
+-- 
+property_id PK
+postcode_id FK
+address_1   not null
+address_2
+address_3
+county
+country
+
+
+-- tPropertyVend
+-- an individual vending of a property on a site
+-- duplicates can be id'd by property
+vend_id      PK
+property_id  FK
+buy_type -- 'R'ent/'B'uy (auction/commercial?)
+cr_date  -- date added to system
+status   -- 'C'urrent, 'R'emoved, 'U'nder offer, 'S'old
+
+
+-- tPropertySource
+source_id    -- PK
+vend_id      --                         CPK 
+source       -- 'FAP' - findaproperty   CPK
+             -- 'RM'  - Rightmove      
+
+-- tPropertyFAP
+source_id
+fap_id
+agent_id  
+
+
+
+-- tPropertyRM
+source_id
+rm_id
+
+
+
+-- tPriceHistory
+vend_id
+update_date
+price
+rent_period - 'M','W','Y' 
+
+
+-- tFAPAgent
+agent_id - PK, serial
+agent_details - etc
+
+-- tPropertyAgent
+agent_id    - FK
+property_id - FK
+
+
+
+NOTES
+=====
+-- Foreach postcode that doesn't exist in the db, we'll need to identify the 
+-- position and shove in the db
+
+-- Need to get list of postcodes to look up - available on web somewhere.
+
+-- de-duplication of props
+
+-- google maps - need api key
+--               street view?
+
+-- resolution of map = difference in long/lat?
+
+-- did i do something about searching for nearby props?
+
+-- foreach property, either take:
+	-- postcode it's in
+	-- or postcode from map url
+
+-- web search - postcode spaces gotcha
+
+IDEAS
+=====
+- clickthrough on properties - record clicks and redirect client to site - popular properties?
+- perform check ourselves when something clicked to see if it still returns something sensible - if not, then remove it and make it a historical search?
+- google maps' street view?
+- different colours for more recent stuff?
+
+
